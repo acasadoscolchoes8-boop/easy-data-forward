@@ -12,13 +12,15 @@ export const Route = createFileRoute("/contato")({
       {
         name: "description",
         content:
-          "Fale com a Mannes Colchões: (11) 94085-1995, Alphashopping - Alameda Madeira, 54 - Loja 04, Alphaville/ Barueri / SP. Envie sua mensagem pelo formulário.",
+          "Fale com a Mannes Colchões: (11) 94085-1995, Alphashopping - Alameda Madeira, 53 - Loja 4, Alphaville Industrial, Barueri - SP.",
       },
       { property: "og:title", content: "Contato — Mannes Colchões" },
       {
         property: "og:description",
         content: "Para dúvidas ou mais informações, fale com a equipe Mannes Colchões.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
 
   }),
@@ -83,7 +85,7 @@ function ContatoPage() {
             </div>
             <iframe
               title="Mapa da localização da Mannes Colchões no Alphashopping"
-              src="https://www.google.com/maps?q=Alameda+Madeira,+54+-+Loja+04,+Alphaville,+Barueri,+SP,+06444-010&output=embed"
+              src="https://www.google.com/maps?q=Alphashopping,+Alameda+Madeira,+53,+Loja+4,+Alphaville+Industrial,+Barueri,+SP,+06454-010&output=embed"
               className="mt-8 h-64 w-full rounded-3xl border border-border"
               loading="lazy"
             />

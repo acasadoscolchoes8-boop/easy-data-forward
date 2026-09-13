@@ -33,7 +33,15 @@ export function useInstitutional(): InstitutionalContent {
       .maybeSingle()
       .then(({ data }) => {
         if (!active || !data?.value) return;
-        setContent({ ...INSTITUTIONAL_FALLBACK, ...(data.value as Partial<InstitutionalContent>) });
+        setContent({
+          ...INSTITUTIONAL_FALLBACK,
+          ...(data.value as Partial<InstitutionalContent>),
+          phone: CONTACT.phone,
+          phoneHref: CONTACT.phoneHref,
+          address: CONTACT.address,
+          city: CONTACT.city,
+          whatsapp: CONTACT.whatsapp,
+        });
       });
     return () => {
       active = false;
