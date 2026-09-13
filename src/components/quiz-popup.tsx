@@ -187,7 +187,7 @@ export function QuizPopup({ catalog, whatsapp }: { catalog: Product[]; whatsapp:
                 Próximo <ArrowRight className="size-4" />
               </button>
               <p className="text-xs text-muted-foreground">
-                Seus dados e respostas são enviados para o WhatsApp da Mannes Colchões no final.
+                Suas respostas são enviadas automaticamente para a equipe da loja ao final do teste.
               </p>
             </form>
           )}
@@ -266,7 +266,8 @@ export function QuizPopup({ catalog, whatsapp }: { catalog: Product[]; whatsapp:
                 {name.split(" ")[0]}, estes são os seus 3 colchões
               </h3>
               <p className="mt-1.5 text-sm text-muted-foreground">
-                Escolhemos as opções que mais combinam com as suas respostas.
+                Escolhemos as opções que mais combinam com as suas respostas. Já recebemos o seu
+                teste e nossa equipe pode entrar em contato pelo seu WhatsApp.
               </p>
 
               <div className="mt-5 grid gap-4">
