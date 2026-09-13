@@ -45,6 +45,20 @@ export function QuizPopup({ catalog, whatsapp }: { catalog: Product[]; whatsapp:
 
   const recommendations = useMemo(() => recommendProducts(catalog, answers), [catalog, answers]);
 
+  const leadSent = useRef(false);
+  useEffect(() => {
+    if (step !== "resultado" || leadSent.current) return;
+    leadSent.current = true;
+    void sendQuizLead({
+      data: {
+        name: name.trim(),
+        phone: phone.trim(),
+        answers: answersSummary(answers),
+        recommendations: recommendations.map((r) => r.product.name),
+      },
+    }).catch((err) => console.error("Falha ao enviar lead por e-mail", err));
+  }, [step, name, phone, answers, recommendations]);
+
   const total = QUIZ_QUESTIONS.length;
   const stepNumber = step === "contato" ? 0 : step === "resultado" ? total + 1 : step + 1;
   const progress = Math.round((stepNumber / (total + 1)) * 100);
