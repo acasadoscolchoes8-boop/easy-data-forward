@@ -1,9 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, MessageCircle, Sparkles, X } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Product } from "@/data/site";
+import { sendQuizLead } from "@/lib/leads.functions";
 import {
   QUIZ_QUESTIONS,
+  answersSummary,
   buildWhatsappMessage,
   recommendProducts,
   type QuizAnswers,
@@ -42,6 +44,20 @@ export function QuizPopup({ catalog, whatsapp }: { catalog: Product[]; whatsapp:
   }, [open]);
 
   const recommendations = useMemo(() => recommendProducts(catalog, answers), [catalog, answers]);
+
+  const leadSent = useRef(false);
+  useEffect(() => {
+    if (step !== "resultado" || leadSent.current) return;
+    leadSent.current = true;
+    void sendQuizLead({
+      data: {
+        name: name.trim(),
+        phone: phone.trim(),
+        answers: answersSummary(answers),
+        recommendations: recommendations.map((r) => r.product.name),
+      },
+    }).catch((err) => console.error("Falha ao enviar lead por e-mail", err));
+  }, [step, name, phone, answers, recommendations]);
 
   const total = QUIZ_QUESTIONS.length;
   const stepNumber = step === "contato" ? 0 : step === "resultado" ? total + 1 : step + 1;
@@ -171,7 +187,7 @@ export function QuizPopup({ catalog, whatsapp }: { catalog: Product[]; whatsapp:
                 Próximo <ArrowRight className="size-4" />
               </button>
               <p className="text-xs text-muted-foreground">
-                Seus dados e respostas são enviados para o WhatsApp da Mannes Colchões no final.
+                Suas respostas são enviadas automaticamente para a equipe da loja ao final do teste.
               </p>
             </form>
           )}
@@ -250,7 +266,8 @@ export function QuizPopup({ catalog, whatsapp }: { catalog: Product[]; whatsapp:
                 {name.split(" ")[0]}, estes são os seus 3 colchões
               </h3>
               <p className="mt-1.5 text-sm text-muted-foreground">
-                Escolhemos as opções que mais combinam com as suas respostas.
+                Escolhemos as opções que mais combinam com as suas respostas. Já recebemos o seu
+                teste e nossa equipe pode entrar em contato pelo seu WhatsApp.
               </p>
 
               <div className="mt-5 grid gap-4">
