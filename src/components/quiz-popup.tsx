@@ -1,9 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check, MessageCircle, Sparkles, X } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Product } from "@/data/site";
+import { sendQuizLead } from "@/lib/leads.functions";
 import {
   QUIZ_QUESTIONS,
+  answersSummary,
   buildWhatsappMessage,
   recommendProducts,
   type QuizAnswers,
