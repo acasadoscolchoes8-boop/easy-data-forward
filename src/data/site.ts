@@ -3,8 +3,8 @@ import { TECHNOLOGY_ASSETS } from "@/assets/technologies";
 export const CONTACT = {
   phone: "(11) 94085-1995",
   phoneHref: "tel:11940851995",
-  address: "Alphashopping - Alameda Madeira, 54 - Loja 04",
-  city: "Alphaville/ Barueri / SP – CEP 06444-010",
+  address: "Alphashopping - Alameda Madeira, 53 - Loja 4",
+  city: "Alphaville Industrial - Barueri - SP – CEP 06454-010",
   instagram: "https://www.instagram.com/mannes.colchoes/",
   facebook: "https://www.facebook.com/mannescolchoes9",
   whatsapp: "5511940851995",
