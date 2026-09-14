@@ -3,6 +3,7 @@ import { Facebook, Instagram, MapPin, Phone } from "lucide-react";
 import { NAV } from "@/data/site";
 import { useInstitutional } from "@/hooks/use-institutional";
 import { WhatsAppFloat } from "@/components/whatsapp-float";
+import kingMattressLogo from "@/assets/king-mattress-logo.png.asset.json";
 
 export function SiteFooter() {
   const CONTACT = useInstitutional();
@@ -11,15 +12,14 @@ export function SiteFooter() {
       <footer className="mt-24 bg-primary text-primary-foreground">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-3">
         <div>
-          <span className="inline-block rounded-md border-2 border-primary-foreground px-3 py-1.5 leading-none">
-            <span className="block font-display text-2xl font-extrabold tracking-tight">
-              mannes
-            </span>
-            <span className="block text-[0.5rem] font-semibold uppercase tracking-[0.35em] opacity-80">
-              colchões
-            </span>
-          </span>
-          <p className="mt-5 max-w-xs text-sm opacity-80">{CONTACT.about}</p>
+          <img
+            src={kingMattressLogo.url}
+            alt="King Mattress Colchões"
+            className="h-auto w-64 brightness-0 invert"
+          />
+          <p className="mt-5 max-w-sm text-sm leading-relaxed opacity-80">
+            Na King Mattress representante autorizada Mannes Colchões em Alphaville cada detalhe é pensado com a maior atenção para garantir o conforto e a segurança do consumidor.
+          </p>
         </div>
 
         <div>
