@@ -83,12 +83,7 @@ function ContatoPage() {
                 <Facebook className="size-5" />
               </a>
             </div>
-            <iframe
-              title="Mapa da localização da Mannes Colchões no Alphashopping"
-              src="https://www.google.com/maps?q=Alphashopping,+Alameda+Madeira,+53,+Loja+4,+Alphaville+Industrial,+Barueri,+SP,+06454-010&output=embed"
-              className="mt-8 h-64 w-full rounded-3xl border border-border"
-              loading="lazy"
-            />
+            <StoreMap />
 
           </div>
 
