@@ -3,6 +3,7 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { NAV } from "@/data/site";
 import { cn } from "@/lib/utils";
+import kingMattressLogo from "@/assets/king-mattress-logo.png.asset.json";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -11,14 +12,11 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/95 backdrop-blur">
       <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 sm:px-6 lg:py-4">
         <Link to="/" className="flex min-w-0 items-center gap-3" onClick={() => setOpen(false)}>
-          <span className="rounded-md border-2 border-primary px-3 py-1.5 leading-none">
-            <span className="block font-display text-xl font-extrabold tracking-tight text-primary sm:text-2xl">
-              mannes
-            </span>
-            <span className="block text-[0.5rem] font-semibold uppercase tracking-[0.35em] text-muted-foreground">
-              colchões
-            </span>
-          </span>
+          <img
+            src={kingMattressLogo.url}
+            alt="King Mattress Colchões"
+            className="h-auto w-48 sm:w-56"
+          />
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex">
