@@ -76,7 +76,7 @@ export function SiteFooter() {
         </div>
         </div>
         <div className="border-t border-primary-foreground/15 py-5 text-center text-xs opacity-70">
-          © {new Date().getFullYear()} Mannes Colchões. Todos os direitos reservados.
+          © {new Date().getFullYear()} King Mattress Colchões - CNPJ: 60.952.390/0001-21. Todos os direitos reservados.
         </div>
       </footer>
       <WhatsAppFloat />

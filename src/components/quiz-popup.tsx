@@ -116,7 +116,7 @@ export function QuizPopup({ catalog, whatsapp }: { catalog: Product[]; whatsapp:
       role="dialog"
       aria-modal="true"
       aria-label="Descubra o colchão ideal"
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-foreground/60 p-4 py-8 backdrop-blur-sm sm:items-center"
+      className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-foreground/60 p-4 py-8 backdrop-blur-sm sm:items-center"
     >
       <div className="relative w-full max-w-lg rounded-3xl bg-background shadow-2xl">
         <button
