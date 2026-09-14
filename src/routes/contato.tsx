@@ -27,6 +27,79 @@ export const Route = createFileRoute("/contato")({
   component: ContatoPage,
 });
 
+const STORE_QUERY =
+  "Alphashopping, Alameda Madeira, 53, Loja 4, Alphaville Industrial, Barueri, SP, 06454-010";
+const STORE_MAP_URL = `https://www.google.com/maps?q=${encodeURIComponent(STORE_QUERY)}&output=embed`;
+
+function StoreMap() {
+  const [mapUrl, setMapUrl] = useState(STORE_MAP_URL);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [routeActive, setRouteActive] = useState(false);
+
+  const traceRoute = () => {
+    setError(null);
+    if (!navigator.geolocation) {
+      setError("Seu navegador não permite acessar a localização.");
+      return;
+    }
+    setLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const origin = `${pos.coords.latitude},${pos.coords.longitude}`;
+        setMapUrl(
+          `https://www.google.com/maps?saddr=${origin}&daddr=${encodeURIComponent(STORE_QUERY)}&output=embed`,
+        );
+        setRouteActive(true);
+        setLoading(false);
+      },
+      () => {
+        setError(
+          "Não conseguimos acessar sua localização. Permita o acesso no navegador ou abra a rota no Google Maps.",
+        );
+        setLoading(false);
+      },
+      { enableHighAccuracy: false, timeout: 10000 },
+    );
+  };
+
+  return (
+    <div className="mt-8">
+      <iframe
+        key={mapUrl}
+        title={
+          routeActive
+            ? "Rota da sua localização até a Mannes Colchões no Alphashopping"
+            : "Mapa da localização da Mannes Colchões no Alphashopping"
+        }
+        src={mapUrl}
+        className="h-64 w-full rounded-3xl border border-border"
+        loading="lazy"
+      />
+      <div className="mt-3 flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          onClick={traceRoute}
+          disabled={loading}
+          className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-xs font-semibold uppercase tracking-wide text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60"
+        >
+          <Navigation className="size-4" />
+          {loading ? "Buscando sua localização..." : routeActive ? "Recalcular rota" : "Traçar rota até a loja"}
+        </button>
+        <a
+          href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(STORE_QUERY)}`}
+          target="_blank"
+          rel="noreferrer"
+          className="text-xs font-semibold text-primary underline"
+        >
+          Abrir rota no Google Maps
+        </a>
+      </div>
+      {error && <p className="mt-2 text-xs text-destructive">{error}</p>}
+    </div>
+  );
+}
+
 function ContatoPage() {
   const CONTACT = useInstitutional();
   const [sent, setSent] = useState(false);
