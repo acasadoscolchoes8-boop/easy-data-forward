@@ -20,8 +20,10 @@ export const Route = createFileRoute("/tecnologias")({
           "Compreendemos a importância de se reinventar: conheça os níveis de conforto e as tecnologias dos colchões Mannes.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://meusitemannes.lovable.app/tecnologias" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://meusitemannes.lovable.app/tecnologias" }],
   }),
   component: TecnologiasPage,
 });

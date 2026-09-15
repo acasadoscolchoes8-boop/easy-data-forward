@@ -25,7 +25,11 @@ export const Route = createFileRoute("/mannes")({
         name: "twitter:image",
         content: "https://mannes.com.br/wp-content/uploads/2025/04/2025_Mannes_Banner-Site_Mannes.jpg",
       },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://meusitemannes.lovable.app/mannes" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://meusitemannes.lovable.app/mannes" }],
   }),
   component: MannesPage,
 });

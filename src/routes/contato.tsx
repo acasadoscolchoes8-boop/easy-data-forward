@@ -8,21 +8,22 @@ import { useInstitutional } from "@/hooks/use-institutional";
 export const Route = createFileRoute("/contato")({
   head: () => ({
     meta: [
-      { title: "Contato Mannes Colchões — Fale conosco e onde encontrar" },
+      { title: "Loja de Colchões em Alphaville | King Mattress" },
       {
         name: "description",
         content:
-          "Fale com a Mannes Colchões: (11) 94085-1995, Alphashopping - Alameda Madeira, 53 - Loja 4, Alphaville Industrial, Barueri - SP.",
+          "Visite a King Mattress, loja de colchões Mannes no Alphashopping em Alphaville, Barueri. Veja o mapa, trace sua rota ou ligue: (11) 94085-1995.",
       },
-      { property: "og:title", content: "Contato — Mannes Colchões" },
+      { property: "og:title", content: "King Mattress no Alphashopping — Mapa e contato" },
       {
         property: "og:description",
-        content: "Para dúvidas ou mais informações, fale com a equipe Mannes Colchões.",
+        content: "Veja a localização da King Mattress em Alphaville, trace sua rota e fale com nossa equipe.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://meusitemannes.lovable.app/contato" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-
+    links: [{ rel: "canonical", href: "https://meusitemannes.lovable.app/contato" }],
   }),
   component: ContatoPage,
 });
@@ -109,8 +110,8 @@ function ContatoPage() {
       <SiteHeader />
       <main>
         <section className="bg-primary px-4 py-16 text-center text-primary-foreground sm:px-6">
-          <h1 className="section-title text-4xl sm:text-5xl">Contato</h1>
-          <p className="mt-3 text-sm opacity-85 sm:text-base">Fale conosco</p>
+          <h1 className="section-title text-4xl sm:text-5xl">Loja de colchões em Alphaville</h1>
+          <p className="mt-3 text-sm opacity-85 sm:text-base">Visite a King Mattress no Alphashopping</p>
         </section>
 
         <section className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-2">
