@@ -5,7 +5,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { DeliveryBanner } from "@/components/delivery-banner";
 import { QuizPopup } from "@/components/quiz-popup";
 import { LINES } from "@/data/site";
-import { getCatalog, getSiteContent } from "@/lib/content.functions";
+import { DEFAULT_HERO, getCatalog, getSiteContent } from "@/lib/content.functions";
 
 
 export const Route = createFileRoute("/")({
@@ -45,6 +45,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   const { content, catalog } = Route.useLoaderData();
   const { hero } = content;
+  const desktopHero = hero.image.includes("_mobile") ? DEFAULT_HERO.image : hero.image;
   return (
     <div className="min-h-screen">
       <QuizPopup catalog={catalog} whatsapp={content.institutional.whatsapp} />
@@ -55,7 +56,7 @@ function Index() {
         <section aria-label="Destaque Mannes">
           <a href={hero.ctaTo} className="block">
             <picture>
-              <source media="(min-width: 750px)" srcSet={hero.image} />
+              <source media="(min-width: 750px)" srcSet={desktopHero} />
               <img src={hero.mobileImage} alt={hero.alt} className="block h-auto w-full" fetchPriority="high" />
             </picture>
           </a>
