@@ -16,18 +16,22 @@ export const Route = createFileRoute("/produtos")({
 
   head: () => ({
     meta: [
-      { title: "Produtos Mannes — Catálogo de colchões com filtros" },
+      { title: "Colchões Mannes | Catálogo King Mattress Alphaville" },
       {
         name: "description",
         content:
-          "Catálogo completo de colchões Mannes: filtre por categoria de tecido, suporte, tipo de mola, conforto e altura.",
+          "Conheça os colchões Mannes disponíveis na King Mattress em Alphaville. Compare conforto, molas, suporte, tecido e altura.",
       },
       { property: "og:title", content: "Produtos — Mannes Colchões" },
       {
         property: "og:description",
         content: "Qualidade acima da média: encontre o colchão ideal filtrando por conforto, mola e altura.",
       },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://meusitemannes.lovable.app/produtos" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://meusitemannes.lovable.app/produtos" }],
   }),
   loader: () => getCatalog(),
   component: ProdutosPage,

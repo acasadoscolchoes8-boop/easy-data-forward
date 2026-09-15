@@ -30,6 +30,7 @@ export const Route = createFileRoute("/produto/$slug")({
       };
     }
     const { product } = loaderData;
+    const pageUrl = `https://meusitemannes.lovable.app/produto/${product.slug}`;
     return {
       meta: [
         { title: `Colchão ${product.name} — Mannes Colchões` },
@@ -38,6 +39,24 @@ export const Route = createFileRoute("/produto/$slug")({
         { property: "og:description", content: product.descricao.slice(0, 155) },
         { property: "og:image", content: product.image },
         { name: "twitter:image", content: product.image },
+        { property: "og:type", content: "product" },
+        { property: "og:url", content: pageUrl },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+      links: [{ rel: "canonical", href: pageUrl }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: `Colchão ${product.name}`,
+            description: product.descricao,
+            image: product.image,
+            brand: { "@type": "Brand", name: "Mannes Colchões" },
+            url: pageUrl,
+          }),
+        },
       ],
     };
   },

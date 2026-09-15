@@ -11,18 +11,20 @@ import { DEFAULT_HERO, getCatalog, getSiteContent } from "@/lib/content.function
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Mannes Colchões — Colchões de qualidade acima da média" },
+      { title: "Colchões Mannes em Alphaville | King Mattress" },
       {
         name: "description",
         content:
-          "Colchões Mannes: 60 anos de mercado, tecnologias de conforto, tratamento antiácaros e antialérgico. Conheça as linhas Colchões, Sky e Espuma Mannes.",
+          "Loja de colchões Mannes em Alphaville, Barueri. Encontre colchões de molas e espuma com atendimento especializado na King Mattress.",
       },
-      { property: "og:title", content: "Mannes Colchões — Sonhe + alto" },
+      { property: "og:title", content: "Colchões Mannes em Alphaville | King Mattress" },
       {
         property: "og:description",
         content:
-          "Colchões com acabamentos minuciosos, tecnologias exclusivas e qualidade acima da média.",
+          "Representante autorizada Mannes em Alphaville, com atendimento especializado para você escolher o colchão ideal.",
       },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://meusitemannes.lovable.app/" },
       {
         property: "og:image",
         content:
@@ -32,6 +34,34 @@ export const Route = createFileRoute("/")({
         name: "twitter:image",
         content:
           "https://mannes.com.br/wp-content/uploads/2025/04/2025_Mannes_Banner-Site_Principal_mobile-1.jpg",
+      },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "https://meusitemannes.lovable.app/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Store",
+          name: "King Mattress Colchões",
+          description:
+            "Representante autorizada Mannes Colchões em Alphaville, especializada em colchões de molas e espuma.",
+          url: "https://meusitemannes.lovable.app/",
+          telephone: "+55 11 94085-1995",
+          taxID: "60.952.390/0001-21",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Alameda Madeira, 53, Loja 4, Alphashopping",
+            addressLocality: "Barueri",
+            addressRegion: "SP",
+            postalCode: "06454-010",
+            addressCountry: "BR",
+          },
+          areaServed: ["Alphaville", "Barueri", "Grande São Paulo"],
+          hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Alphashopping, Alameda Madeira, 53, Loja 4, Alphaville Industrial, Barueri, SP, 06454-010")}`,
+          brand: { "@type": "Brand", name: "Mannes Colchões" },
+        }),
       },
     ],
   }),
@@ -66,11 +96,15 @@ function Index() {
 
         {/* Linhas */}
         <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:py-24">
-          <h1 className="section-title mx-auto max-w-2xl text-center text-3xl leading-tight sm:text-5xl">
-            Colchões de qualidade
+          <h1 className="section-title mx-auto max-w-3xl text-center text-3xl leading-tight sm:text-5xl">
+            Colchões Mannes em Alphaville
             <br />
-            acima da média
+            qualidade acima da média
           </h1>
+          <p className="mx-auto mt-5 max-w-2xl text-center text-sm text-muted-foreground sm:text-base">
+            Na King Mattress você encontra colchões de molas e espuma Mannes com atendimento
+            especializado para escolher o conforto ideal.
+          </p>
 
           <div className="mt-12 grid gap-8 md:grid-cols-3">
             {LINES.map((line) => (

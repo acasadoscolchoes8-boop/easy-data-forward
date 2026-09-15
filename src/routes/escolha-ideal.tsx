@@ -29,8 +29,10 @@ export const Route = createFileRoute("/escolha-ideal")({
           "Um teste guiado que indica os 3 colchões Mannes mais adequados para o seu sono e conecta você a um consultor.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://meusitemannes.lovable.app/escolha-ideal" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://meusitemannes.lovable.app/escolha-ideal" }],
   }),
   loader: async () => ({
     catalog: await getCatalog(),
