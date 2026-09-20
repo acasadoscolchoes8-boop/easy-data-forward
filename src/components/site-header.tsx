@@ -15,7 +15,7 @@ export function SiteHeader() {
           <img
             src={kingMattressLogo}
             alt="King Mattress Colchões"
-            className="h-auto w-48 sm:w-56"
+            className="h-auto w-36 sm:w-40"
           />
         </Link>
 

@@ -15,7 +15,7 @@ export function SiteFooter() {
           <img
             src={kingMattressLogo}
             alt="King Mattress Colchões"
-            className="h-auto w-64 brightness-0 invert"
+            className="h-auto w-40 brightness-0 invert"
           />
           <p className="mt-5 max-w-sm text-sm leading-relaxed opacity-80">
             Na King Mattress representante autorizada Mannes Colchões em Alphaville cada detalhe é pensado com a maior atenção para garantir o conforto e a segurança do consumidor.
