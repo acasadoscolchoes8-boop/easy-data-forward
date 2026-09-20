@@ -3,7 +3,7 @@ import { Facebook, Instagram, MapPin, Phone } from "lucide-react";
 import { NAV } from "@/data/site";
 import { useInstitutional } from "@/hooks/use-institutional";
 import { WhatsAppFloat } from "@/components/whatsapp-float";
-import kingMattressLogo from "@/assets/king-mattress-logo.png.asset.json";
+import kingMattressLogo from "@/assets/king-mattress-logo-new.png";
 
 export function SiteFooter() {
   const CONTACT = useInstitutional();
@@ -13,7 +13,7 @@ export function SiteFooter() {
         <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-3">
         <div>
           <img
-            src={kingMattressLogo.url}
+            src={kingMattressLogo}
             alt="King Mattress Colchões"
             className="h-auto w-64 brightness-0 invert"
           />
