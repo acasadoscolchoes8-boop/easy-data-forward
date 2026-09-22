@@ -1,0 +1,38 @@
+name: Publicar na Kinghost
+
+# Roda automaticamente a cada push na branch principal e envia o site
+# pronto para a Kinghost via FTP. Configure os segredos no GitHub:
+#   FTP_SERVER     (ex.: ftp.seudominio.com.br)
+#   FTP_USERNAME   (usuário FTP do painel Kinghost)
+#   FTP_PASSWORD   (senha FTP do painel Kinghost)
+#   FTP_SERVER_DIR (pasta do site, ex.: /www/ ou /public_html/)
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Instalar o Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Instalar dependências
+        run: bun install --frozen-lockfile
+
+      - name: Gerar versão estática do site
+        run: bun run build:kinghost
+
+      - name: Enviar para a Kinghost (FTP)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          local-dir: ./dist/client/
