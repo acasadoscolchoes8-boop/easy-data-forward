@@ -1,4 +1,4 @@
-import { cp, mkdir, readdir, rm, stat, writeFile } from "node:fs/promises";
+import { cp, mkdir, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
 import { dirname, extname, join, relative, resolve } from "node:path";
 
 const root = process.cwd();
@@ -7,11 +7,10 @@ if (!/^[a-zA-Z0-9._-]+$/.test(outputDirectory)) {
   throw new Error("Nome de pasta de saída inválido.");
 }
 const output = resolve(root, outputDirectory);
-const siteOrigin = process.env.KINGHOST_SOURCE_URL ?? "https://meusitemannes.lovable.app";
 const requiredFiles = [".htaccess", "favicon.png", "robots.txt", "sitemap.xml"];
-const copiedDirectories = ["assets"];
+const copiedDirectories = ["assets", "static-assets"];
 const routes = ["/", "/produtos", "/escolha-ideal", "/tecnologias", "/mannes", "/contato"];
-const remoteAssetPattern = /(?:src|href)=["'](\/__l5e\/[^"']+)["']/g;
+const snapshots = resolve(root, "static-pages");
 
 async function assertReadable(path) {
   try {
@@ -37,22 +36,6 @@ function localReferences(html) {
   return [...matches].map((match) => match[1]).filter(Boolean);
 }
 
-function remoteReferences(html) {
-  return [...html.matchAll(remoteAssetPattern)].map((match) => match[1].slice(1));
-}
-
-async function downloadAsset(reference) {
-  const destination = resolve(output, reference);
-  if (await isReadable(destination)) return;
-
-  const response = await fetch(new URL(reference, siteOrigin), {
-    headers: { "User-Agent": "King-Mattress-static-export/1.0" },
-  });
-  if (!response.ok) throw new Error(`Falha ao baixar ${reference}: HTTP ${response.status}`);
-  await mkdir(dirname(destination), { recursive: true });
-  await writeFile(destination, Buffer.from(await response.arrayBuffer()));
-}
-
 async function isReadable(path) {
   try {
     await stat(path);
@@ -65,6 +48,9 @@ async function isReadable(path) {
 await Promise.all([
   ...requiredFiles.map((file) => assertReadable(resolve(root, file))),
   ...copiedDirectories.map((directory) => assertReadable(resolve(root, directory))),
+  ...routes.map((route) =>
+    assertReadable(resolve(snapshots, route === "/" ? "index.html" : `${route.slice(1)}/index.html`)),
+  ),
 ]);
 
 const assetFiles = await listFiles(resolve(root, "assets"));
@@ -83,20 +69,13 @@ await Promise.all([
     await mkdir(dirname(destination), { recursive: true });
     await cp(resolve(root, file), destination);
   }),
-  ...copiedDirectories.map((directory) =>
-    cp(resolve(root, directory), resolve(output, directory), { recursive: true }),
-  ),
+  cp(resolve(root, "assets"), resolve(output, "assets"), { recursive: true }),
+  cp(resolve(root, "static-assets"), output, { recursive: true }),
 ]);
 
 for (const route of routes) {
-  const response = await fetch(new URL(route, siteOrigin), {
-    headers: { "User-Agent": "King-Mattress-static-export/1.0" },
-  });
-  if (!response.ok) {
-    throw new Error(`Falha ao gerar ${route}: HTTP ${response.status}`);
-  }
-
-  const html = await response.text();
+  const relativeRoute = route === "/" ? "index.html" : `${route.slice(1)}/index.html`;
+  const html = await readFile(resolve(snapshots, relativeRoute), "utf8");
   if (!html.includes("</html>")) {
     throw new Error(`Conteúdo HTML incompleto em ${route}.`);
   }
@@ -106,12 +85,11 @@ for (const route of routes) {
 
   const references = [...new Set(localReferences(portableHtml))];
   for (const reference of references) {
-    if (reference.startsWith("assets/")) await downloadAsset(reference);
+    if ((reference.startsWith("assets/") || reference.startsWith("__l5e/")) && !(await isReadable(resolve(output, reference)))) {
+      throw new Error(`Arquivo usado por ${route} está ausente: ${reference}`);
+    }
   }
-  const remoteAssets = [...new Set(remoteReferences(portableHtml))];
-  for (const reference of remoteAssets) await downloadAsset(reference);
 
-  const relativeRoute = route === "/" ? "index.html" : `${route.slice(1)}/index.html`;
   const destination = resolve(output, relativeRoute);
   await mkdir(dirname(destination), { recursive: true });
   await writeFile(destination, portableHtml);

@@ -5,3 +5,4 @@
 - Deploy Kinghost production only through the GitHub Actions FTP/FTPS workflow, targeting `/www/` by default and verifying every public route afterward; credentials remain in GitHub secrets and never enter the repository.
 - Generate `dist` before starting the local static server; this prevents the preview from falling back to a stale application when generated pages are absent.
 - Serve preview HTML without browser caching and clear the preview cache on navigation; this prevents obsolete Vite modules from a previous project version from executing.
+- Build deployments from the versioned `static-pages` and `static-assets` snapshots; this keeps production deploys independent of an external site's route availability.
