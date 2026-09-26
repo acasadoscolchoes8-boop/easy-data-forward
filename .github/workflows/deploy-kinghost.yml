@@ -4,7 +4,7 @@ name: Publicar na Kinghost
 # pronto para a Kinghost via FTP. Configure os segredos no GitHub:
 #   FTP_SERVER     (ftp.mannescolchoes.com.br)
 #   FTP_USERNAME   (mannescolchoes)
-#   FTP_PASSWORD   (Diemi2810@)
+#   FTP_PASSWORD   (diemi2810s)
 #   FTP_SERVER_DIR (/www)
 
 on:
