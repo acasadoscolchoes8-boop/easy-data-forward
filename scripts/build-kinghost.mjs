@@ -3,8 +3,10 @@ import { dirname, extname, join, relative, resolve } from "node:path";
 
 const root = process.cwd();
 const output = resolve(root, "dist-kinghost");
-const requiredFiles = ["_shell.html", ".htaccess", "favicon.png", "robots.txt", "sitemap.xml"];
+const siteOrigin = process.env.KINGHOST_SOURCE_URL ?? "https://meusitemannes.lovable.app";
+const requiredFiles = [".htaccess", "favicon.png", "robots.txt", "sitemap.xml"];
 const copiedDirectories = ["assets"];
+const routes = ["/", "/produtos", "/escolha-ideal", "/tecnologias", "/mannes", "/contato"];
 
 async function assertReadable(path) {
   try {
@@ -35,12 +37,6 @@ await Promise.all([
   ...copiedDirectories.map((directory) => assertReadable(resolve(root, directory))),
 ]);
 
-const shell = await readFile(resolve(root, "_shell.html"), "utf8");
-const references = [...new Set(localReferences(shell))];
-for (const reference of references) {
-  await assertReadable(resolve(root, reference));
-}
-
 const assetFiles = await listFiles(resolve(root, "assets"));
 if (!assetFiles.some((file) => extname(file) === ".js")) {
   throw new Error("Nenhum arquivo JavaScript foi encontrado em assets.");
@@ -62,6 +58,28 @@ await Promise.all([
   ),
 ]);
 
-await cp(resolve(root, "_shell.html"), resolve(output, "index.html"));
+for (const route of routes) {
+  const response = await fetch(new URL(route, siteOrigin), {
+    headers: { "User-Agent": "King-Mattress-static-export/1.0" },
+  });
+  if (!response.ok) {
+    throw new Error(`Falha ao gerar ${route}: HTTP ${response.status}`);
+  }
 
-console.log(`Pacote Kinghost criado em ${relative(root, output)}/ com ${assetFiles.length} arquivos em assets.`);
+  const html = await response.text();
+  if (!html.includes("</html>")) {
+    throw new Error(`Conteúdo HTML incompleto em ${route}.`);
+  }
+
+  const references = [...new Set(localReferences(html))];
+  for (const reference of references) {
+    if (reference.startsWith("assets/")) await assertReadable(resolve(root, reference));
+  }
+
+  const relativeRoute = route === "/" ? "index.html" : `${route.slice(1)}/index.html`;
+  const destination = resolve(output, relativeRoute);
+  await mkdir(dirname(destination), { recursive: true });
+  await Bun.write(destination, html);
+}
+
+console.log(`Pacote Kinghost criado em ${relative(root, output)}/ com ${routes.length} páginas e ${assetFiles.length} arquivos em assets.`);

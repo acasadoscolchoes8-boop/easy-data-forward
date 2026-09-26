@@ -1,6 +1,6 @@
 # Publicação na Kinghost pelo GitHub
 
-Este repositório contém a versão estática pronta para hospedagem Apache. O arquivo `.htaccess` direciona as páginas do site para `index.html`, e o GitHub Actions envia somente a pasta `dist-kinghost`.
+Este repositório contém a versão estática pronta para hospedagem Apache. O comando de geração captura as páginas públicas completas do site publicado na Lovable, e o GitHub Actions envia somente a pasta `dist-kinghost`.
 
 ## 1. Gerar e conferir localmente
 
@@ -10,6 +10,12 @@ npm run preview:kinghost
 ```
 
 Abra `http://localhost:4173`. Para encerrar a prévia, pressione `Ctrl+C`.
+
+Se a URL publicada na Lovable mudar, informe a origem no comando:
+
+```bash
+KINGHOST_SOURCE_URL="https://nova-url.lovable.app" npm run build:kinghost
+```
 
 ## 2. Configurar o repositório no GitHub
 
