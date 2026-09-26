@@ -53,7 +53,7 @@ await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 await Promise.all([
   ...requiredFiles.map(async (file) => {
-    const destination = resolve(output, file === "_shell.html" ? "index.html" : file);
+    const destination = resolve(output, file);
     await mkdir(dirname(destination), { recursive: true });
     await cp(resolve(root, file), destination);
   }),
@@ -61,5 +61,7 @@ await Promise.all([
     cp(resolve(root, directory), resolve(output, directory), { recursive: true }),
   ),
 ]);
+
+await cp(resolve(root, "_shell.html"), resolve(output, "index.html"));
 
 console.log(`Pacote Kinghost criado em ${relative(root, output)}/ com ${assetFiles.length} arquivos em assets.`);
