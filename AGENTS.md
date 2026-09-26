@@ -1,4 +1,5 @@
 # Architecture Decisions
 
 - Keep the Kinghost deployment as a separately generated static package in `dist-kinghost`; this preserves the Lovable/TanStack server deployment while supporting Apache hosting.
+- The standard Lovable build writes the same validated static export to `dist`; Lovable's deployment check requires that directory.
 - Deploy Kinghost production only through the GitHub Actions FTP/FTPS workflow; credentials remain in GitHub secrets and never enter the repository.

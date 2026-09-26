@@ -2,7 +2,11 @@ import { cp, mkdir, readdir, rm, stat, writeFile } from "node:fs/promises";
 import { dirname, extname, join, relative, resolve } from "node:path";
 
 const root = process.cwd();
-const output = resolve(root, "dist-kinghost");
+const outputDirectory = process.argv[2] ?? "dist-kinghost";
+if (!/^[a-zA-Z0-9._-]+$/.test(outputDirectory)) {
+  throw new Error("Nome de pasta de saída inválido.");
+}
+const output = resolve(root, outputDirectory);
 const siteOrigin = process.env.KINGHOST_SOURCE_URL ?? "https://meusitemannes.lovable.app";
 const requiredFiles = [".htaccess", "favicon.png", "robots.txt", "sitemap.xml"];
 const copiedDirectories = ["assets"];
@@ -110,4 +114,4 @@ for (const route of routes) {
   await writeFile(destination, html);
 }
 
-console.log(`Pacote Kinghost criado em ${relative(root, output)}/ com ${routes.length} páginas e ${assetFiles.length} arquivos em assets.`);
+console.log(`Pacote estático criado em ${relative(root, output)}/ com ${routes.length} páginas e ${assetFiles.length} arquivos em assets.`);
