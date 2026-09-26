@@ -38,14 +38,19 @@ jobs:
           port: ${{ vars.KINGHOST_FTP_PORT || 21 }}
           local-dir: ./dist-kinghost/
           server-dir: ${{ vars.KINGHOST_FTP_DIRECTORY || '/www/' }}
-          dangerous-clean-slate: false
+          dangerous-clean-slate: true
 
       - name: Confirmar site publicado
         env:
           SITE_URL: ${{ vars.KINGHOST_SITE_URL || 'https://mannescolchoes.com.br' }}
         run: |
           for path in / /produtos /escolha-ideal /tecnologias /mannes /contato; do
-            curl --fail --silent --show-error --location \
+            page="$(curl --fail --silent --show-error --location \
               --retry 6 --retry-all-errors --retry-delay 10 \
-              --output /dev/null "${SITE_URL}${path}"
+              "${SITE_URL}${path}")"
+            test "${#page}" -gt 10000
+            if printf '%s' "$page" | grep -q '_shell.html'; then
+              echo "Arquivo antigo detectado em ${path}."
+              exit 1
+            fi
           done
