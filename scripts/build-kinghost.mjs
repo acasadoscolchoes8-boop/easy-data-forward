@@ -100,18 +100,21 @@ for (const route of routes) {
   if (!html.includes("</html>")) {
     throw new Error(`Conteúdo HTML incompleto em ${route}.`);
   }
+  const portableHtml = html
+    .replace(/<script[^>]+src=["']\/~flock\.js["'][^>]*><\/script>/g, "")
+    .replace(/<script[^>]*>[^<]*lovable-flock[^<]*<\/script>/g, "");
 
-  const references = [...new Set(localReferences(html))];
+  const references = [...new Set(localReferences(portableHtml))];
   for (const reference of references) {
     if (reference.startsWith("assets/")) await downloadAsset(reference);
   }
-  const remoteAssets = [...new Set(remoteReferences(html))];
+  const remoteAssets = [...new Set(remoteReferences(portableHtml))];
   for (const reference of remoteAssets) await downloadAsset(reference);
 
   const relativeRoute = route === "/" ? "index.html" : `${route.slice(1)}/index.html`;
   const destination = resolve(output, relativeRoute);
   await mkdir(dirname(destination), { recursive: true });
-  await writeFile(destination, html);
+  await writeFile(destination, portableHtml);
 }
 
 console.log(`Pacote estático criado em ${relative(root, output)}/ com ${routes.length} páginas e ${assetFiles.length} arquivos em assets.`);
