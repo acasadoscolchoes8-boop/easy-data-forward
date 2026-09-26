@@ -1,16 +1,15 @@
-# Site estático hospedado em Apache
-DirectoryIndex index.html
+# TanStack Start SPA hospedado em Apache
+DirectoryIndex _shell.html
 
 RewriteEngine On
 
-# Cada endereço público possui seu próprio index.html.
+# SPA fallback: rotas inexistentes caem no _shell.html
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{DOCUMENT_ROOT}/$1/index.html -f
-RewriteRule ^(.+?)/?$ $1/index.html [L]
+RewriteRule ^ _shell.html [L]
 
 <IfModule mod_headers.c>
-  <FilesMatch "index\.html$">
+  <FilesMatch "_shell\.html$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
   </FilesMatch>
   <FilesMatch "\.(?:js|css|woff2|woff|svg|png|jpg|jpeg|webp|gif|ico)$">
