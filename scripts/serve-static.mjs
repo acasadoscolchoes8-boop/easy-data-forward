@@ -1,0 +1,76 @@
+import { createReadStream } from "node:fs";
+import { stat } from "node:fs/promises";
+import { extname, resolve } from "node:path";
+import { createServer } from "node:http";
+
+const projectRoot = process.cwd();
+const root = resolve(projectRoot, process.env.STATIC_DIRECTORY ?? "dist");
+const port = Number(process.env.PORT ?? 8080);
+const mimeTypes = {
+  ".css": "text/css; charset=utf-8",
+  ".gif": "image/gif",
+  ".html": "text/html; charset=utf-8",
+  ".ico": "image/x-icon",
+  ".jpeg": "image/jpeg",
+  ".jpg": "image/jpeg",
+  ".js": "text/javascript; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
+  ".png": "image/png",
+  ".svg": "image/svg+xml",
+  ".webp": "image/webp",
+  ".xml": "application/xml; charset=utf-8",
+};
+
+async function isFile(path) {
+  try {
+    return (await stat(path)).isFile();
+  } catch {
+    return false;
+  }
+}
+
+createServer(async (request, response) => {
+  response.setHeader("X-Content-Type-Options", "nosniff");
+  const baseUrl = `http://${request.headers.host ?? "localhost"}`;
+  const pathname = decodeURIComponent(new URL(request.url ?? "/", baseUrl).pathname);
+  const requested = resolve(root, `.${pathname}`);
+  const routeIndex = resolve(root, `.${pathname}`, "index.html");
+  const requestedFileExists = requested.startsWith(root) && (await isFile(requested));
+  const routeIndexExists = routeIndex.startsWith(root) && (await isFile(routeIndex));
+  const looksLikeFile = extname(pathname) !== "";
+
+  if (!requestedFileExists && !routeIndexExists && looksLikeFile) {
+    response.writeHead(404, {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-store",
+    });
+    response.end("Arquivo não encontrado.");
+    return;
+  }
+
+  const safePath = requestedFileExists
+    ? requested
+    : routeIndexExists
+      ? routeIndex
+      : resolve(root, "index.html");
+
+  response.setHeader("Content-Type", mimeTypes[extname(safePath)] ?? "application/octet-stream");
+  if (safePath.endsWith("index.html")) {
+    response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+    response.setHeader("Clear-Site-Data", '"cache"');
+  }
+
+  const stream = createReadStream(safePath);
+  stream.on("error", () => {
+    if (!response.headersSent) {
+      response.writeHead(404, {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "no-store",
+      });
+    }
+    response.end("Arquivo não encontrado.");
+  });
+  stream.pipe(response);
+}).listen(port, "0.0.0.0", () => {
+  console.log(`Prévia estática disponível em http://localhost:${port}`);
+});
