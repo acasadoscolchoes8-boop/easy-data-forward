@@ -55,8 +55,22 @@ createServer(async (request, response) => {
       : resolve(root, "index.html");
 
   response.setHeader("Content-Type", mimeTypes[extname(safePath)] ?? "application/octet-stream");
-  if (safePath.endsWith("index.html")) response.setHeader("Cache-Control", "no-store");
-  createReadStream(safePath).pipe(response);
+  if (safePath.endsWith("index.html")) {
+    response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+    response.setHeader("Clear-Site-Data", '"cache"');
+  }
+
+  const stream = createReadStream(safePath);
+  stream.on("error", () => {
+    if (!response.headersSent) {
+      response.writeHead(404, {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Cache-Control": "no-store",
+      });
+    }
+    response.end("Arquivo não encontrado.");
+  });
+  stream.pipe(response);
 }).listen(port, "0.0.0.0", () => {
   console.log(`Prévia estática disponível em http://localhost:${port}`);
 });
