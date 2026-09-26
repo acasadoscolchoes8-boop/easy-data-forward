@@ -1,0 +1,9 @@
+{
+  "name": "king-mattress-static",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:kinghost": "node scripts/build-kinghost.mjs",
+    "preview:kinghost": "python3 -m http.server 4173 --directory dist-kinghost"
+  }
+}
