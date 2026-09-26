@@ -32,6 +32,27 @@ function localReferences(html) {
   return [...matches].map((match) => match[1]).filter(Boolean);
 }
 
+async function downloadAsset(reference) {
+  const destination = resolve(output, reference);
+  if (await isReadable(destination)) return;
+
+  const response = await fetch(new URL(reference, siteOrigin), {
+    headers: { "User-Agent": "King-Mattress-static-export/1.0" },
+  });
+  if (!response.ok) throw new Error(`Falha ao baixar ${reference}: HTTP ${response.status}`);
+  await mkdir(dirname(destination), { recursive: true });
+  await writeFile(destination, Buffer.from(await response.arrayBuffer()));
+}
+
+async function isReadable(path) {
+  try {
+    await stat(path);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 await Promise.all([
   ...requiredFiles.map((file) => assertReadable(resolve(root, file))),
   ...copiedDirectories.map((directory) => assertReadable(resolve(root, directory))),
@@ -73,7 +94,7 @@ for (const route of routes) {
 
   const references = [...new Set(localReferences(html))];
   for (const reference of references) {
-    if (reference.startsWith("assets/")) await assertReadable(resolve(root, reference));
+    if (reference.startsWith("assets/")) await downloadAsset(reference);
   }
 
   const relativeRoute = route === "/" ? "index.html" : `${route.slice(1)}/index.html`;
