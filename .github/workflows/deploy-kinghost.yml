@@ -1,0 +1,41 @@
+name: Publicar na Kinghost
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+
+concurrency:
+  group: kinghost-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Validar e publicar
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Baixar o projeto
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Gerar pacote estático
+        run: npm run build:kinghost
+
+      - name: Publicar por FTP/FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ secrets.KINGHOST_FTP_SERVER }}
+          username: ${{ secrets.KINGHOST_FTP_USERNAME }}
+          password: ${{ secrets.KINGHOST_FTP_PASSWORD }}
+          protocol: ${{ vars.KINGHOST_FTP_PROTOCOL || 'ftps' }}
+          port: ${{ vars.KINGHOST_FTP_PORT || 21 }}
+          local-dir: ./dist-kinghost/
+          server-dir: ${{ vars.KINGHOST_FTP_DIRECTORY || '/' }}
+          dangerous-clean-slate: false
