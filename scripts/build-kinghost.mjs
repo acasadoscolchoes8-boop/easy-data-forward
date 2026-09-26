@@ -1,4 +1,4 @@
-import { cp, mkdir, readFile, readdir, rm, stat } from "node:fs/promises";
+import { cp, mkdir, readdir, rm, stat, writeFile } from "node:fs/promises";
 import { dirname, extname, join, relative, resolve } from "node:path";
 
 const root = process.cwd();
@@ -79,7 +79,7 @@ for (const route of routes) {
   const relativeRoute = route === "/" ? "index.html" : `${route.slice(1)}/index.html`;
   const destination = resolve(output, relativeRoute);
   await mkdir(dirname(destination), { recursive: true });
-  await Bun.write(destination, html);
+  await writeFile(destination, html);
 }
 
 console.log(`Pacote Kinghost criado em ${relative(root, output)}/ com ${routes.length} páginas e ${assetFiles.length} arquivos em assets.`);
