@@ -37,5 +37,15 @@ jobs:
           protocol: ${{ vars.KINGHOST_FTP_PROTOCOL || 'ftps' }}
           port: ${{ vars.KINGHOST_FTP_PORT || 21 }}
           local-dir: ./dist-kinghost/
-          server-dir: ${{ vars.KINGHOST_FTP_DIRECTORY || '/' }}
+          server-dir: ${{ vars.KINGHOST_FTP_DIRECTORY || '/www/' }}
           dangerous-clean-slate: false
+
+      - name: Confirmar site publicado
+        env:
+          SITE_URL: ${{ vars.KINGHOST_SITE_URL || 'https://mannescolchoes.com.br' }}
+        run: |
+          for path in / /produtos /escolha-ideal /tecnologias /mannes /contato; do
+            curl --fail --silent --show-error --location \
+              --retry 6 --retry-all-errors --retry-delay 10 \
+              --output /dev/null "${SITE_URL}${path}"
+          done

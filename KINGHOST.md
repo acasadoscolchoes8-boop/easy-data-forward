@@ -27,9 +27,10 @@ Em **Settings → Secrets and variables → Actions**, cadastre estes **Reposito
 
 Na aba **Variables**, configure quando necessário:
 
-- `KINGHOST_FTP_DIRECTORY`: pasta pública do domínio na Kinghost. Se não for informada, será usada `/`.
+- `KINGHOST_FTP_DIRECTORY`: pasta pública vinculada ao domínio. O padrão é `/www/`, que é a pasta pública usual da Kinghost. Só altere se o painel da sua conta indicar outro caminho.
 - `KINGHOST_FTP_PROTOCOL`: `ftps` por padrão. Use `ftp` somente se a conta não aceitar FTPS.
 - `KINGHOST_FTP_PORT`: `21` por padrão.
+- `KINGHOST_SITE_URL`: endereço usado para conferir a publicação. O padrão é `https://mannescolchoes.com.br`.
 
 ## 3. Publicar
 
@@ -47,7 +48,9 @@ Se a branch do repositório for `master`, use:
 git push origin master
 ```
 
-O fluxo **Publicar na Kinghost** será iniciado automaticamente. Também é possível iniciá-lo em **Actions → Publicar na Kinghost → Run workflow**.
+O fluxo **Publicar na Kinghost** será iniciado automaticamente. Também é possível iniciá-lo em **Actions → Publicar na Kinghost → Run workflow**. Depois do envio, a automação testa a página inicial e as cinco páginas internas; se alguma continuar retornando 403 ou 404, a execução será marcada como falha.
+
+Se o domínio mostrar **403 Forbidden**, confirme no FTP que `index.html`, `.htaccess`, `assets` e as pastas das páginas estão diretamente dentro de `www`, e não dentro de `www/dist-kinghost`.
 
 ## Observação
 
