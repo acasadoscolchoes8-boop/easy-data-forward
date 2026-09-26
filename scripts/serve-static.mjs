@@ -30,13 +30,27 @@ async function isFile(path) {
 }
 
 createServer(async (request, response) => {
+  response.setHeader("X-Content-Type-Options", "nosniff");
   const baseUrl = `http://${request.headers.host ?? "localhost"}`;
   const pathname = decodeURIComponent(new URL(request.url ?? "/", baseUrl).pathname);
   const requested = resolve(root, `.${pathname}`);
   const routeIndex = resolve(root, `.${pathname}`, "index.html");
-  const safePath = requested.startsWith(root) && (await isFile(requested))
+  const requestedFileExists = requested.startsWith(root) && (await isFile(requested));
+  const routeIndexExists = routeIndex.startsWith(root) && (await isFile(routeIndex));
+  const looksLikeFile = extname(pathname) !== "";
+
+  if (!requestedFileExists && !routeIndexExists && looksLikeFile) {
+    response.writeHead(404, {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-store",
+    });
+    response.end("Arquivo não encontrado.");
+    return;
+  }
+
+  const safePath = requestedFileExists
     ? requested
-    : routeIndex.startsWith(root) && (await isFile(routeIndex))
+    : routeIndexExists
       ? routeIndex
       : resolve(root, "index.html");
 
