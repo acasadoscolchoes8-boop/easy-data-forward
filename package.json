@@ -3,6 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "node scripts/serve-static.mjs",
+    "build:dev": "npm run build:kinghost",
     "build:kinghost": "node scripts/build-kinghost.mjs",
     "preview:kinghost": "python3 -m http.server 4173 --directory dist-kinghost"
   }
