@@ -5,8 +5,8 @@ name: Publicar na Kinghost
 #   FTP_SERVER     (ftp.mannescolchoes.com.br)
 #   FTP_USERNAME   (mannescolchoes)
 #   FTP_PASSWORD   (diemi2810s)
-#   FTP_SERVER_DIR (/www)
-
+#   FTP_SERVER_DIR (/)
+dangerous-clean-slate: true
 on:
   push:
     branches: [main, master]
