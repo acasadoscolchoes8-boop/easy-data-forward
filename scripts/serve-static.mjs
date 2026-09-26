@@ -30,6 +30,7 @@ async function isFile(path) {
 }
 
 createServer(async (request, response) => {
+  response.setHeader("X-Content-Type-Options", "nosniff");
   const baseUrl = `http://${request.headers.host ?? "localhost"}`;
   const pathname = decodeURIComponent(new URL(request.url ?? "/", baseUrl).pathname);
   const requested = resolve(root, `.${pathname}`);
