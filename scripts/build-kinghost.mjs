@@ -7,6 +7,7 @@ const siteOrigin = process.env.KINGHOST_SOURCE_URL ?? "https://meusitemannes.lov
 const requiredFiles = [".htaccess", "favicon.png", "robots.txt", "sitemap.xml"];
 const copiedDirectories = ["assets"];
 const routes = ["/", "/produtos", "/escolha-ideal", "/tecnologias", "/mannes", "/contato"];
+const remoteAssetPattern = /(?:src|href)=["'](\/__l5e\/[^"']+)["']/g;
 
 async function assertReadable(path) {
   try {
@@ -30,6 +31,10 @@ async function listFiles(directory) {
 function localReferences(html) {
   const matches = html.matchAll(/(?:src|href)=["']\/([^"'#?]+)["']/g);
   return [...matches].map((match) => match[1]).filter(Boolean);
+}
+
+function remoteReferences(html) {
+  return [...html.matchAll(remoteAssetPattern)].map((match) => match[1].slice(1));
 }
 
 async function downloadAsset(reference) {
@@ -96,6 +101,8 @@ for (const route of routes) {
   for (const reference of references) {
     if (reference.startsWith("assets/")) await downloadAsset(reference);
   }
+  const remoteAssets = [...new Set(remoteReferences(html))];
+  for (const reference of remoteAssets) await downloadAsset(reference);
 
   const relativeRoute = route === "/" ? "index.html" : `${route.slice(1)}/index.html`;
   const destination = resolve(output, relativeRoute);
