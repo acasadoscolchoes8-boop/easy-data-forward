@@ -38,7 +38,7 @@ jobs:
           protocol: ${{ vars.KINGHOST_FTP_PROTOCOL || 'ftps' }}
           port: ${{ vars.KINGHOST_FTP_PORT || 21 }}
           local-dir: ./dist-kinghost/
-          server-dir: ${{ vars.KINGHOST_FTP_DIRECTORY || '/www/' }}
+          server-dir: ${{ vars.KINGHOST_FTP_DIRECTORY || '/' }}
           state-name: .ftp-deploy-sync-state-v2.json
 
       - name: Confirmar site publicado
