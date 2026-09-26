@@ -3,7 +3,8 @@ import { stat } from "node:fs/promises";
 import { extname, resolve } from "node:path";
 import { createServer } from "node:http";
 
-const root = process.cwd();
+const projectRoot = process.cwd();
+const root = resolve(projectRoot, process.env.STATIC_DIRECTORY ?? "dist");
 const port = Number(process.env.PORT ?? 8080);
 const mimeTypes = {
   ".css": "text/css; charset=utf-8",
@@ -32,12 +33,15 @@ createServer(async (request, response) => {
   const baseUrl = `http://${request.headers.host ?? "localhost"}`;
   const pathname = decodeURIComponent(new URL(request.url ?? "/", baseUrl).pathname);
   const requested = resolve(root, `.${pathname}`);
+  const routeIndex = resolve(root, `.${pathname}`, "index.html");
   const safePath = requested.startsWith(root) && (await isFile(requested))
     ? requested
-    : resolve(root, "_shell.html");
+    : routeIndex.startsWith(root) && (await isFile(routeIndex))
+      ? routeIndex
+      : resolve(root, "index.html");
 
   response.setHeader("Content-Type", mimeTypes[extname(safePath)] ?? "application/octet-stream");
-  if (safePath.endsWith("_shell.html")) response.setHeader("Cache-Control", "no-store");
+  if (safePath.endsWith("index.html")) response.setHeader("Cache-Control", "no-store");
   createReadStream(safePath).pipe(response);
 }).listen(port, "0.0.0.0", () => {
   console.log(`Prévia estática disponível em http://localhost:${port}`);
